@@ -1,12 +1,12 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PELICAN PANEL - HTTPS://PELICAN.DEV/",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - HTTPS://PTERODACTYL.IO",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
     "exported_at": "2026-03-17T12:00:00+00:00",
     "name": "Banana Shooter",
-    "author": "sem@osesem.xyz",
+    "author": "michiel@bendur.com",
     "description": "Banana Shooter is a fun, fast-paced multiplayer arena shooter where players battle it out on various maps. The player with the highest kill count gets a special weapon: bananas! Supports multiple game modes including Deathmatch, Infected, Kill Confirm, Knockout, and Catch the Banana.",
     "features": [
         "steam_disk_space"
@@ -15,16 +15,16 @@
         "ghcr.io\/parkervcp\/steamcmd:debian": "ghcr.io\/parkervcp\/steamcmd:debian"
     },
     "file_denylist": [],
-    "startup": "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)\/linux64 && export TERM=xterm && .\/BSDS.x86_64 -batchmode -nographics +Server {{SERVER_NAME}} +maxplayercount {{MAX_PLAYERS}} +port {{SERVER_PORT}} $@",
+    "startup": "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)\/linux64 && export TERM=xterm && .\/BSDS.x86_64 -batchmode -nographics +Server {{SERVER_NAME}} +maxplayercount {{MAX_PLAYERS}} +port {{SERVER_PORT}}",
     "config": {
-        "files": "{\r\n    \"Servers\/{{server.build.env.SERVER_NAME}}\/Config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"Login_Token\": \"{{server.build.env.GSLT}}\"\r\n        }\r\n    }\r\n}",
-        "startup": "{\r\n    \"done\": \"Application loaded\"\r\n}",
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Loaded Level\"\r\n}",
         "logs": "{}",
         "stop": "quit"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n# Banana Shooter Dedicated Server Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n# Image to install with is 'ghcr.io\/parkervcp\/installers:debian'\r\n\r\n##\r\n#\r\n# Variables\r\n# STEAM_USER, STEAM_PASS, STEAM_AUTH - Steam user setup. If a user has 2fa enabled it will most likely fail due to timeout.\r\n# SRCDS_APPID - steam app id for the dedicated server (2406780 for Banana Shooter DS)\r\n# NOTE: Banana Shooter DS requires a Steam account that owns the game. Anonymous login will NOT work.\r\n#\r\n##\r\n\r\n## just in case someone removed the defaults.\r\nif [[ \"${STEAM_USER}\" == \"\" ]] || [[ \"${STEAM_PASS}\" == \"\" ]]; then\r\n    echo -e \"\\n--- ERROR ---\"\r\n    echo -e \"Banana Shooter Dedicated Server requires a Steam account that owns the game.\"\r\n    echo -e \"Anonymous login will NOT work. Please set STEAM_USER and STEAM_PASS.\\n\"\r\n    exit 1\r\nelse\r\n    echo -e \"user set to ${STEAM_USER}\"\r\nfi\r\n\r\n## download and install steamcmd\r\ncd \/tmp\r\nmkdir -p \/mnt\/server\/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steamcmd\r\nmkdir -p \/mnt\/server\/steamapps # Fix steamcmd disk write error when this folder is missing\r\ncd \/mnt\/server\/steamcmd\r\n\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root \/mnt\r\nexport HOME=\/mnt\/server\r\n\r\n## install game using steamcmd\r\n.\/steamcmd.sh +force_install_dir \/mnt\/server +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update ${SRCDS_APPID} $( [[ -z ${SRCDS_BETAID} ]] || printf %s \"-beta ${SRCDS_BETAID}\" ) $( [[ -z ${SRCDS_BETAPASS} ]] || printf %s \"-betapassword ${SRCDS_BETAPASS}\" ) validate +quit\r\n\r\n## set up 32 and 64 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk32\r\ncp -v linux32\/steamclient.so ..\/..\/.steam\/sdk32\/steamclient.so\r\n\r\nmkdir -p \/mnt\/server\/.steam\/sdk64\r\ncp -v linux64\/steamclient.so ..\/..\/.steam\/sdk64\/steamclient.so\r\n\r\n# Ensure the server binary and shell scripts are executable\r\nchmod +x \/mnt\/server\/BSDS.x86_64 2>\/dev\/null\r\nchmod +x \/mnt\/server\/ExampleServer.sh 2>\/dev\/null\r\nchmod +x \/mnt\/server\/ModdedServer.sh 2>\/dev\/null\r\n\r\necho -e \"\\n--- Banana Shooter Dedicated Server installed successfully ---\\n\"\r\necho -e \"Note: On first launch, the server will generate Config.json in Servers\/{ServerName}\/\"\r\necho -e \"Set your GSLT (Game Server Login Token) for the server to appear on the community server list.\"\r\necho -e \"Create a GSLT at: https:\/\/steamcommunity.com\/dev\/managegameservers using AppID 1949740\\n\"",
+            "script": "#!\/bin\/bash\r\n# Banana Shooter Dedicated Server Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n# Image to install with is 'ghcr.io\/parkervcp\/installers:debian'\r\n\r\n##\r\n#\r\n# Variables\r\n# STEAM_USER, STEAM_PASS, STEAM_AUTH - Steam user setup.\r\n# SRCDS_APPID - steam app id for the dedicated server (2406780 for Banana Shooter DS)\r\n# NOTE: Banana Shooter DS requires a Steam account that owns the game. Anonymous login will NOT work.\r\n#\r\n##\r\n\r\nif [[ \"${STEAM_USER}\" == \"\" ]] || [[ \"${STEAM_PASS}\" == \"\" ]]; then\r\n    echo -e \"\\n--- ERROR ---\"\r\n    echo -e \"Banana Shooter Dedicated Server requires a Steam account that owns the game.\"\r\n    echo -e \"Anonymous login will NOT work. Please set STEAM_USER and STEAM_PASS.\\n\"\r\n    exit 1\r\nelse\r\n    echo -e \"user set to ${STEAM_USER}\"\r\nfi\r\n\r\n## download and install steamcmd\r\ncd \/tmp\r\nmkdir -p \/mnt\/server\/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steamcmd\r\nmkdir -p \/mnt\/server\/steamapps\r\ncd \/mnt\/server\/steamcmd\r\n\r\nchown -R root:root \/mnt\r\nexport HOME=\/mnt\/server\r\n\r\n## install game using steamcmd\r\n.\/steamcmd.sh +force_install_dir \/mnt\/server +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update ${SRCDS_APPID} $( [[ -z ${SRCDS_BETAID} ]] || printf %s \"-beta ${SRCDS_BETAID}\" ) $( [[ -z ${SRCDS_BETAPASS} ]] || printf %s \"-betapassword ${SRCDS_BETAPASS}\" ) validate +quit\r\n\r\n## set up 32 and 64 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk32\r\ncp -v linux32\/steamclient.so ..\/..\/.steam\/sdk32\/steamclient.so\r\n\r\nmkdir -p \/mnt\/server\/.steam\/sdk64\r\ncp -v linux64\/steamclient.so ..\/..\/.steam\/sdk64\/steamclient.so\r\n\r\nchmod +x \/mnt\/server\/BSDS.x86_64 2>\/dev\/null\r\nchmod +x \/mnt\/server\/ExampleServer.sh 2>\/dev\/null\r\nchmod +x \/mnt\/server\/ModdedServer.sh 2>\/dev\/null\r\n\r\necho -e \"\\n--- Banana Shooter Dedicated Server installed successfully ---\\n\"\r\necho -e \"Config.json will be generated on first launch in Servers\/{ServerName}\/\"\r\necho -e \"Set Login_Token in Config.json for community server list visibility.\"\r\necho -e \"Create a GSLT at: https:\/\/steamcommunity.com\/dev\/managegameservers using AppID 1949740\\n\"",
             "container": "ghcr.io\/parkervcp\/installers:debian",
             "entrypoint": "bash"
         }
@@ -32,7 +32,7 @@
     "variables": [
         {
             "name": "Server Name",
-            "description": "The server identity name. This is used as the folder name for server data in the Servers\/ directory, and is passed as the +Server argument. Use no spaces or wrap in quotes.",
+            "description": "The server identity name. This determines the folder name in Servers\/ where config and savedata are stored. Avoid spaces.",
             "env_variable": "SERVER_NAME",
             "default_value": "BananaServer",
             "user_viewable": true,
@@ -53,19 +53,19 @@
             "field_type": "text"
         },
         {
-            "name": "Game Server Login Token (GSLT)",
-            "description": "Required for your server to appear in the public community server list. Create one at https:\/\/steamcommunity.com\/dev\/managegameservers using AppID 1949740. Your Steam account must own the game, not be limited, and have a verified phone number. Without a GSLT, the server will only be visible on LAN.",
-            "env_variable": "GSLT",
-            "default_value": "",
+            "name": "Server Port",
+            "description": "The port the server listens on. Default is 27017. Make sure this matches your Pelican port allocation.",
+            "env_variable": "SERVER_PORT",
+            "default_value": "27017",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "nullable|string|max:64",
+            "rules": "required|integer|between:1024,65535",
             "sort": null,
             "field_type": "text"
         },
         {
             "name": "App ID",
-            "description": "The Steam App ID for the Banana Shooter Dedicated Server. Do not change unless you know what you are doing.",
+            "description": "The Steam App ID for the Banana Shooter Dedicated Server. Do not change.",
             "env_variable": "SRCDS_APPID",
             "default_value": "2406780",
             "user_viewable": true,
@@ -76,7 +76,7 @@
         },
         {
             "name": "Steam User",
-            "description": "Steam account used for SteamCMD authentication. REQUIRED - Banana Shooter DS cannot be downloaded anonymously. The account must own Banana Shooter.",
+            "description": "REQUIRED - Steam account that owns Banana Shooter. Anonymous login will not work.",
             "env_variable": "STEAM_USER",
             "default_value": "",
             "user_viewable": true,
@@ -87,7 +87,7 @@
         },
         {
             "name": "Steam Password",
-            "description": "Password for the Steam account. REQUIRED for Banana Shooter DS installation.",
+            "description": "REQUIRED - Password for the Steam account.",
             "env_variable": "STEAM_PASS",
             "default_value": "",
             "user_viewable": true,
@@ -98,7 +98,7 @@
         },
         {
             "name": "Steam Auth Code",
-            "description": "Steam Guard 2FA code. Required if using a Steam account with Steam Guard enabled. You may need to reinstall to enter a new code.",
+            "description": "Steam Guard 2FA code if needed. May need to reinstall to enter a new code.",
             "env_variable": "STEAM_AUTH",
             "default_value": "",
             "user_viewable": true,
@@ -109,7 +109,7 @@
         },
         {
             "name": "Beta Branch",
-            "description": "Set a beta branch to install. Leave blank to use the default\/public branch.",
+            "description": "Beta branch to install. Leave blank for public branch.",
             "env_variable": "SRCDS_BETAID",
             "default_value": "",
             "user_viewable": true,
