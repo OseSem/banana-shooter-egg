@@ -15,10 +15,10 @@
         "ghcr.io\/parkervcp\/steamcmd:debian": "ghcr.io\/parkervcp\/steamcmd:debian"
     },
     "file_denylist": [],
-    "startup": "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)\/linux64 && export TERM=xterm && .\/BSDS.x86_64 -batchmode -nographics -logFile \/dev\/stdout +Server {{SERVER_NAME}} +maxplayercount {{MAX_PLAYERS}} +port {{SERVER_PORT}}",
+    "startup": "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)\/linux64 && export TERM=dumb && .\/BSDS.x86_64 -batchmode -nographics -logFile - +Server {{SERVER_NAME}} +maxplayercount {{MAX_PLAYERS}} +port {{SERVER_PORT}}",
     "config": {
         "files": "{}",
-        "startup": "{\r\n    \"done\": \"Loaded Level\"\r\n}",
+        "startup": "{\r\n    \"done\": \"Started on port\"\r\n}",
         "logs": "{}",
         "stop": "quit"
     },
