@@ -2,7 +2,7 @@
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - HTTPS://PTERODACTYL.IO",
     "meta": {
         "version": "PTDL_v2",
-        "update_url": null
+        "update_url": "https://raw.githubusercontent.com/OseSem/banana-shooter-egg/refs/heads/main/egg-banana-shooter.json"
     },
     "exported_at": "2026-03-17T12:00:00+00:00",
     "name": "Banana Shooter",
